@@ -2,18 +2,22 @@
 #main-page 
   AppHeader
   #contacts
-    .contact(v-for="contact in contacts" :key="contact.id" :class="{ active : selectedContactId === contact.id }" @click="selectContact(contact.id, contact)") 
+    .search
+     input(v-model="search" placeholder="Search")  
+    .contact(v-for="contact in filteredContacts" :key="contact.id" :class="{ active : selectedContact.id === contact.id }" @click="selectContact(contact.id, contact)") 
       .avatar(:style="{ background: contact.color}")
       p {{ contact.name }}
   #chat
-    #chat-container(v-if="selectedContactId")
+    #chat-container(v-if="selectedContact.id")
       .message(v-for="(message, index) in selectedContact.messages" :key="index") 
         .avatar(:style="{ background: selectedContact.color}")
         .text
           .nickname {{ selectedContact.name }}
           p {{ message }} 
-
     .empty(v-else) Please select chat to start messaging
+    .new-message(v-if="selectedContact.id")
+      .avatar(:style="{ background: selectedContact.color}")
+      input(v-model="newMessage" v-on:keyup.enter="addNewMessage()" placeholder="Write new message...")      
 </template>
 
 <script>
@@ -25,8 +29,8 @@ export default {
   name: 'MainPage',
   data() {
     return {
-      selectedContactId: null,
-      selectedContact: {},
+      selectedContact: {id: null},
+      search: '',
       contacts: [
         {
           id: 1,
@@ -46,14 +50,21 @@ export default {
           messages: ["First Lorem message", "Second Lorem message", "Third Lorem message"],
           color: ''
         },
-      ]
+      ],
+      newMessage: ''
     }
   },
   components: {
     AppHeader
   },
   computed: {
-  
+    filteredContacts() {
+      let array = this.contacts
+      if (this.search && this.search.length > 0) {
+        array = this.contacts.filter(contact => contact.name.toLowerCase().includes(this.search.toLowerCase()))
+      }
+      return array
+    }
   },
   created() {
     this.getAvatarColors()
@@ -68,8 +79,11 @@ export default {
       })
     },
     selectContact(id, contact) {
-      this.selectedContactId = id
       this.selectedContact = contact
+    },
+    addNewMessage() {
+      this.selectedContact.messages.push(this.newMessage)
+      this.newMessage = ''
     }
   }
 }
