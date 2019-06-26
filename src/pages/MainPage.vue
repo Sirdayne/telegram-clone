@@ -9,7 +9,9 @@
     #chat-container(v-if="selectedContactId")
       .message(v-for="(message, index) in selectedContact.messages" :key="index") 
         .avatar(:style="{ background: selectedContact.color}")
-        p {{ message }} 
+        .text
+          .nickname {{ selectedContact.name }}
+          p {{ message }} 
 
     .empty(v-else) Please select chat to start messaging
 </template>
