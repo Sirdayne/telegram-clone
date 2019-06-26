@@ -67,6 +67,7 @@ export default {
     }
   },
   created() {
+    this.getLocalStorage()
     this.getAvatarColors()
   },
   methods: {
@@ -84,6 +85,13 @@ export default {
     addNewMessage() {
       this.selectedContact.messages.push(this.newMessage)
       this.newMessage = ''
+      this.setLocalStorage()
+    },
+    getLocalStorage() {
+      this.contacts = localStorage.getItem('contacts') ? JSON.parse(localStorage.getItem('contacts')) : this.contacts;
+    },
+    setLocalStorage() {
+      localStorage.setItem('contacts', JSON.stringify(this.contacts));
     }
   }
 }
