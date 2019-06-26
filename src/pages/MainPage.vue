@@ -7,6 +7,8 @@
     .contact(v-for="contact in filteredContacts" :key="contact.id" :class="{ active : selectedContact.id === contact.id }" @click="selectContact(contact.id, contact)") 
       .avatar(:style="{ background: contact.color}")
       p {{ contact.name }}
+    .add-new-contact
+     input(v-model="newContactName" v-on:keyup.enter="addNewContact()" placeholder="New contact")  
   #chat
     #chat-container(v-if="selectedContact.id")
       .message(v-for="(message, index) in selectedContact.messages" :key="index") 
@@ -31,6 +33,7 @@ export default {
     return {
       selectedContact: {id: null},
       search: '',
+      newContactName: '',
       contacts: [
         {
           id: 1,
@@ -92,6 +95,17 @@ export default {
     },
     setLocalStorage() {
       localStorage.setItem('contacts', JSON.stringify(this.contacts));
+    },
+    addNewContact() {
+      const newContact = {
+        id: this.contacts.length+1,
+        name: this.newContactName,
+        messages: [],
+        color: this.getColor()
+      }
+      this.contacts.push(newContact)
+      this.newContactName = ''
+      this.setLocalStorage()
     }
   }
 }
