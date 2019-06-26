@@ -74,14 +74,6 @@ export default {
     this.getAvatarColors()
   },
   methods: {
-    getAvatarColors() {
-      this.contacts.forEach(contact => contact.color = this.getColor())
-    },
-    getColor() {
-      return randomcolor({
-        hue: 'orange'
-      })
-    },
     selectContact(id, contact) {
       this.selectedContact = contact
     },
@@ -89,12 +81,6 @@ export default {
       this.selectedContact.messages.push(this.newMessage)
       this.newMessage = ''
       this.setLocalStorage()
-    },
-    getLocalStorage() {
-      this.contacts = localStorage.getItem('contacts') ? JSON.parse(localStorage.getItem('contacts')) : this.contacts;
-    },
-    setLocalStorage() {
-      localStorage.setItem('contacts', JSON.stringify(this.contacts));
     },
     addNewContact() {
       const newContact = {
@@ -106,6 +92,20 @@ export default {
       this.contacts.push(newContact)
       this.newContactName = ''
       this.setLocalStorage()
+    },
+    getLocalStorage() {
+      this.contacts = localStorage.getItem('contacts') ? JSON.parse(localStorage.getItem('contacts')) : this.contacts;
+    },
+    setLocalStorage() {
+      localStorage.setItem('contacts', JSON.stringify(this.contacts));
+    },
+    getAvatarColors() {
+      this.contacts.forEach(contact => contact.color = this.getColor())
+    },
+    getColor() {
+      return randomcolor({
+        hue: 'orange'
+      })
     }
   }
 }
