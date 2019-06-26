@@ -8,7 +8,6 @@ import { store } from './store'
 import 'reset-css'
 
 import './styles/main.styl'
-import './styles/media.styl'
 
 Vue.config.productionTip = false
 
